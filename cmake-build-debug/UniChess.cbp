@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="UniChess"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/florence/CLionProjects/UniChess/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j4 -f &quot;/home/florence/CLionProjects/UniChess/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/gmake -j4 -f &quot;/home/florence/CLionProjects/UniChess/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j4 -f &quot;/home/florence/CLionProjects/UniChess/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j4 -f &quot;/home/florence/CLionProjects/UniChess/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/florence/CLionProjects/UniChess/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j4 -f &quot;/home/florence/CLionProjects/UniChess/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/gmake -j4 -f &quot;/home/florence/CLionProjects/UniChess/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j4 -f &quot;/home/florence/CLionProjects/UniChess/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j4 -f &quot;/home/florence/CLionProjects/UniChess/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/florence/CLionProjects/UniChess/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j4 -f &quot;/home/florence/CLionProjects/UniChess/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/gmake -j4 -f &quot;/home/florence/CLionProjects/UniChess/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j4 -f &quot;/home/florence/CLionProjects/UniChess/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j4 -f &quot;/home/florence/CLionProjects/UniChess/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="UniChess">
+				<Option output="/home/florence/CLionProjects/UniChess/cmake-build-debug/UniChess" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/florence/CLionProjects/UniChess/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib64/gcc/x86_64-solus-linux/12/include"/>
+					<Add directory="/usr/lib64/gcc/x86_64-solus-linux/12/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j4 -f &quot;/home/florence/CLionProjects/UniChess/cmake-build-debug/Makefile&quot;  VERBOSE=1 UniChess"/>
+					<CompileFile command="/usr/bin/gmake -j4 -f &quot;/home/florence/CLionProjects/UniChess/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j4 -f &quot;/home/florence/CLionProjects/UniChess/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j4 -f &quot;/home/florence/CLionProjects/UniChess/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="UniChess/fast">
+				<Option output="/home/florence/CLionProjects/UniChess/cmake-build-debug/UniChess" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/florence/CLionProjects/UniChess/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib64/gcc/x86_64-solus-linux/12/include"/>
+					<Add directory="/usr/lib64/gcc/x86_64-solus-linux/12/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j4 -f &quot;/home/florence/CLionProjects/UniChess/cmake-build-debug/Makefile&quot;  VERBOSE=1 UniChess/fast"/>
+					<CompileFile command="/usr/bin/gmake -j4 -f &quot;/home/florence/CLionProjects/UniChess/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j4 -f &quot;/home/florence/CLionProjects/UniChess/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j4 -f &quot;/home/florence/CLionProjects/UniChess/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/florence/CLionProjects/UniChess/headers/error.h">
+			<Option target="UniChess"/>
+		</Unit>
+		<Unit filename="/home/florence/CLionProjects/UniChess/headers/handle_arg.h">
+			<Option target="UniChess"/>
+		</Unit>
+		<Unit filename="/home/florence/CLionProjects/UniChess/headers/move_actions.h">
+			<Option target="UniChess"/>
+		</Unit>
+		<Unit filename="/home/florence/CLionProjects/UniChess/headers/sime_game.h">
+			<Option target="UniChess"/>
+		</Unit>
+		<Unit filename="/home/florence/CLionProjects/UniChess/src/error.c">
+			<Option target="UniChess"/>
+		</Unit>
+		<Unit filename="/home/florence/CLionProjects/UniChess/src/handle_arg.c">
+			<Option target="UniChess"/>
+		</Unit>
+		<Unit filename="/home/florence/CLionProjects/UniChess/src/main.c">
+			<Option target="UniChess"/>
+		</Unit>
+		<Unit filename="/home/florence/CLionProjects/UniChess/src/move_actions.c">
+			<Option target="UniChess"/>
+		</Unit>
+		<Unit filename="/home/florence/CLionProjects/UniChess/src/sime_game.c">
+			<Option target="UniChess"/>
+		</Unit>
+		<Unit filename="/home/florence/CLionProjects/UniChess/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

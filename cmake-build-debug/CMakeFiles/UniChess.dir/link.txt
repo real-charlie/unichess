@@ -1,0 +1,1 @@
+/usr/bin/cc -g CMakeFiles/UniChess.dir/src/main.c.o CMakeFiles/UniChess.dir/src/handle_arg.c.o CMakeFiles/UniChess.dir/src/error.c.o CMakeFiles/UniChess.dir/src/sime_game.c.o CMakeFiles/UniChess.dir/src/move_actions.c.o -o UniChess 
