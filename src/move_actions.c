@@ -124,6 +124,21 @@ int loc_piece(struct c_action* cga, struct cg_status *cg) {
     return locd_ps_count;
 }
 
+int fd_piece(char piece) {
+    switch (piece) {
+        case 'Q':
+            return PP;
+        case 'R':
+            return PR;
+        case 'B':
+            return PB;
+        case 'N':
+            return PN;
+        default:
+            return -1;
+    }
+}
+
 struct c_action id_cga(const char *move, struct cg_status *cg) {
     unsigned int move_size = strlen(move);
     struct piece usr_piece;
@@ -162,9 +177,9 @@ struct c_action id_cga(const char *move, struct cg_status *cg) {
                          move[1 + (is_capture + 1) * is_capture + has_col]};
 
         if (cga.cga == CGA_CAPT && move_size == 6 && move[4] == '=')
-            cga.cga |= CGA_PROM;
+            cga.cga |= (CGA_PROM | fd_piece(move[5]));
         else if (cga.cga != CGA_CAPT && move_size == 4 && move[2] == '=')
-            cga.cga = CGA_PROM;
+            cga.cga = CGA_PROM | move[3];
 
         cga.tg_sqrn = c_sqrn(square);
     } else {
@@ -211,6 +226,15 @@ struct c_action id_cga(const char *move, struct cg_status *cg) {
     return cga;
 }
 
+void add_piece(struct piece ***src_pieces, struct piece *des_piece) {
+    for (int i = 0; i < 9; i++) {
+        if ((*src_pieces[i])->sq == 0) {
+            *src_pieces[i] = des_piece;
+            return;
+        }
+    }
+}
+
 int do_move(const char *move, struct cg_status *cg) {
     struct c_action cga = id_cga(move, cg);
     printf("F: %d\n", cg->white.pawns[0].is_moved);
@@ -228,6 +252,18 @@ int do_move(const char *move, struct cg_status *cg) {
         for (int i = 0; i < 9; i++) {
             if (i <= 8 && (player->pawns[i].sq == curr_sq)) {
                 tmp_piece = &player->pawns[i];
+                if ((cga.cga & CGA_PROM) == CGA_PROM) {
+                    struct piece **tg_piece = (struct piece **) &player->queens;
+                    if ((cga.cga & PR) == PR) {
+                        tg_piece = (struct piece **) &player->rooks;
+                    } else if ((cga.cga & PN) == PN) {
+                        tg_piece = (struct piece **) &player->knights;
+                    } else if ((cga.cga & PB) == PB) {
+                        tg_piece = (struct piece **) &player->bishops;
+                    }
+
+                    add_piece(&tg_piece, tmp_piece);
+                }
             }
 
             if (player->knights[i].sq == curr_sq) {
