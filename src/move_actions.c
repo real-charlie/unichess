@@ -51,6 +51,7 @@ int capt_is_valid(int tg_sqr, struct cg_status *cg) {
 int pb_validate(struct c_action *cga, struct cg_status *cg) {
     int from = cga->tg_piece.sq, to = cga->tg_sqrn, dist = abs(from - to);
     if (((cga->cga | CGA_MOVE) == CGA_MOVE) || ((cga->cga | CGA_CAPT) == CGA_CAPT)) {
+
         int step = 0;
         if (dist % 7 == 0) {
             step = from > to ? -7 : 7;
@@ -58,7 +59,7 @@ int pb_validate(struct c_action *cga, struct cg_status *cg) {
             step = from > to ? -9 : 9;
         }
         int vld_capt = capt_is_valid(to, cg);
-        if (move_is_blocked(step, from, to, cg) || (((cga->cga | CGA_CAPT) == CGA_CAPT) && !vld_capt) || vld_capt) {
+        if (move_is_blocked(step, from, to, cg) || ((cga->cga == CGA_CAPT) && !vld_capt) || vld_capt) {
             return 0;
         }
         return 1;
@@ -108,18 +109,21 @@ int loc_piece(struct c_action* cga, struct cg_status *cg) {
     int locd_ps_count = 0;
 
     for (int i = 0; i < 9; i ++) {
+        struct piece tg_sqr_tmp = cga->tg_piece;
         switch (cga->tg_piece.piece) {
             case PP:
-                if (i <= 8) {
-                    struct piece tg_sqr_tmp = cga->tg_piece;
+                if (i <= 8)
                     cga->tg_piece = player->pawns[i];
-                    if (check_move_validity(cga, cg) == 1)
-                        locd_ps_count++;
-                    else
-                        cga->tg_piece = tg_sqr_tmp;
-                }
-
+                break;
+            case PB:
+                cga->tg_piece = player->bishops[i];
+                printf("\nTest %d\n", cga->tg_piece.sq);
+                break;
         }
+        if (check_move_validity(cga, cg) == 1)
+            locd_ps_count++;
+        else
+            cga->tg_piece = tg_sqr_tmp;
     }
     return locd_ps_count;
 }
@@ -237,7 +241,6 @@ void add_piece(struct piece ***src_pieces, struct piece *des_piece) {
 
 int do_move(const char *move, struct cg_status *cg) {
     struct c_action cga = id_cga(move, cg);
-    printf("F: %d\n", cg->white.pawns[0].is_moved);
     if (check_move_validity(&cga, cg)) {
         int curr_sq = cga.tg_piece.sq, tg_sq = cga.tg_sqrn;
         struct c_player *player = cg->turn ? &cg->black : &cg->white;
@@ -248,10 +251,12 @@ int do_move(const char *move, struct cg_status *cg) {
             return 1;
         }
 
-        struct piece * tmp_piece;
+        struct piece * tmp_piece = NULL;
         for (int i = 0; i < 9; i++) {
+            printf("i i %d\n", i);
             if (i <= 8 && (player->pawns[i].sq == curr_sq)) {
                 tmp_piece = &player->pawns[i];
+                printf("Pawn %d\n", tmp_piece->sq);
                 if ((cga.cga & CGA_PROM) == CGA_PROM) {
                     struct piece **tg_piece = (struct piece **) &player->queens;
                     if ((cga.cga & PR) == PR) {
@@ -283,9 +288,11 @@ int do_move(const char *move, struct cg_status *cg) {
             }
 
             if (tmp_piece != NULL) {
+                printf("TG SQR %d\n", tg_sq);
                 tmp_piece->sq = tg_sq;
                 tmp_piece->is_moved = 1;
                 tmp_piece = NULL;
+//                cg->turn = !cg->turn;
 
                 return 1;
             }

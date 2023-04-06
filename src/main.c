@@ -12,13 +12,13 @@ int main(int argc, char **argv) {
     int ca = PN;
     printf("%d\n", (cd | ca) & PB);
     printf("%s\n", c_nsqr(d.white.queens[0].sq, cc));
-    printf("%d\n", do_move("a4", &d));
-    printf("%d\n", do_move("a5", &d));
-    printf("%d\n", do_move("a6", &d));
-    printf("%d\n", do_move("a7", &d));
-    printf("%d\n", do_move("a8", &d));
+    printf("%d\n", do_move("e4", &d));
+    printf("%d\n", do_move("e5", &d));
+//    printf("%d\n", do_move("e6", &d));
+    printf("%d\n", do_move("Bb5", &d));
     char cf[3];
-    printf("'a' Pawn is now at %s", c_nsqr(d.white.pawns[0].sq, cf));
+    printf("'e' Pawn is now at %s\n", c_nsqr(d.white.pawns[4].sq, cf));
+    printf("'f' Bishop is now at %s", c_nsqr(d.white.bishops[1].sq, cf));
 
     return 0;
 }
