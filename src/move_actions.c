@@ -48,6 +48,25 @@ int capt_is_valid(int tg_sqr, struct cg_status *cg) {
     return 0;
 }
 
+int pr_validate(struct c_action *cga, struct cg_status *cg) {
+    int from = cga->tg_piece.sq, to = cga->tg_sqrn, dist = abs(from - to);
+    if (((cga->cga | CGA_MOVE) == CGA_MOVE) || ((cga->cga | CGA_CAPT) == CGA_CAPT)) {
+
+        int step = 0;
+        if (dist % 8 == 0) {
+            step = from > to ? -8 : 8;
+        } else if (dist == 1 || dist == -1) {
+            step = from > to ? -1 : 1;
+        }
+        int vld_capt = capt_is_valid(to, cg);
+        if (move_is_blocked(step, from, to, cg) || ((cga->cga == CGA_CAPT) && !vld_capt) || vld_capt) {
+            return 0;
+        }
+        return 1;
+    }
+    return 0;
+}
+
 int pb_validate(struct c_action *cga, struct cg_status *cg) {
     int from = cga->tg_piece.sq, to = cga->tg_sqrn, dist = abs(from - to);
     if (((cga->cga | CGA_MOVE) == CGA_MOVE) || ((cga->cga | CGA_CAPT) == CGA_CAPT)) {
