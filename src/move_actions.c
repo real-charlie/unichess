@@ -16,8 +16,10 @@ int move_is_blocked(int step, int from, int to, struct cg_status *cg) {
             if (cg->white.bishops[j].sq == i || cg->black.bishops[j].sq == i)
                 return 1;
 
-            if (cg->white.rooks[j].sq == i || cg->black.rooks[j].sq == i)
+            if (cg->white.rooks[j].sq == i || cg->black.rooks[j].sq == i) {
+                printf("tg: %d\n", i);
                 return 1;
+            }
 
             if (cg->white.queens[j].sq == i || cg->black.queens[j].sq == i)
                 return 1;
@@ -55,11 +57,12 @@ int pr_validate(struct c_action *cga, struct cg_status *cg) {
         int step = 0;
         if (dist % 8 == 0) {
             step = from > to ? -8 : 8;
-        } else if (dist == 1 || dist == -1) {
+        } else if (dist < 8) {
             step = from > to ? -1 : 1;
         }
         int vld_capt = capt_is_valid(to, cg);
         if (move_is_blocked(step, from, to, cg) || ((cga->cga == CGA_CAPT) && !vld_capt) || vld_capt) {
+            printf("test %d\n", move_is_blocked(step, from, to, cg));
             return 0;
         }
         return 1;
@@ -111,7 +114,7 @@ int check_move_validity(struct c_action *cga, struct cg_status *cg) {
         case PB:
             return pb_validate(cga, cg);
         case PR:
-            break;
+            return pr_validate(cga, cg);
         case PQ:
             break;
         case PK:
@@ -136,7 +139,9 @@ int loc_piece(struct c_action* cga, struct cg_status *cg) {
                 break;
             case PB:
                 cga->tg_piece = player->bishops[i];
-                printf("\nTest %d\n", cga->tg_piece.sq);
+                break;
+            case PR:
+                cga->tg_piece = player->rooks[i];
                 break;
         }
         if (check_move_validity(cga, cg) == 1)
@@ -279,6 +284,7 @@ int do_move(const char *move, struct cg_status *cg) {
                 if ((cga.cga & CGA_PROM) == CGA_PROM) {
                     struct piece **tg_piece = (struct piece **) &player->queens;
                     if ((cga.cga & PR) == PR) {
+                        printf("Tax\n");
                         tg_piece = (struct piece **) &player->rooks;
                     } else if ((cga.cga & PN) == PN) {
                         tg_piece = (struct piece **) &player->knights;
@@ -298,7 +304,9 @@ int do_move(const char *move, struct cg_status *cg) {
                 tmp_piece = &player->bishops[i];
             }
 
+            printf("curr_sq : %d, piece_sq : %d\n", curr_sq, player->rooks[i].sq);
             if (player->rooks[i].sq == curr_sq) {
+                printf("-----------STAX-----------\n");
                 tmp_piece = &player->rooks[i];
             }
 
