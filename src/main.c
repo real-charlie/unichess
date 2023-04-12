@@ -13,9 +13,9 @@ int main(int argc, char **argv) {
     printf("D: %d\n", d.white.rooks[1].sq);
     printf("%d\n", (cd | ca) & PB);
     printf("%s\n", c_nsqr(d.white.queens[0].sq, cc));
-    printf("%d\n", do_move("h4", &d));
-    printf("%d\n", do_move("h5", &d));
-    printf("%d\n", do_move("Rh3", &d));
+    printf("%d\n", do_move("d4", &d));
+    printf("%d\n", do_move("d5", &d));
+    printf("%d\n", do_move("Qd3", &d));
 
     return 0;
 }
