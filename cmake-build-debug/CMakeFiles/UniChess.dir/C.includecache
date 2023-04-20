@@ -6,19 +6,27 @@
 
 #IncludeRegexTransform: 
 
+/home/florence/CLionProjects/UniChess/headers/error.h
+
+/home/florence/CLionProjects/UniChess/headers/handle_arg.h
+
 /home/florence/CLionProjects/UniChess/headers/move_actions.h
 sime_game.h
 /home/florence/CLionProjects/UniChess/headers/sime_game.h
 
 /home/florence/CLionProjects/UniChess/headers/sime_game.h
 
-/home/florence/CLionProjects/UniChess/src/move_actions.c
-memory.h
--
+/home/florence/CLionProjects/UniChess/src/main.c
 stdio.h
 -
-stdlib.h
+malloc.h
 -
+../headers/error.h
+/home/florence/CLionProjects/UniChess/headers/error.h
+../headers/handle_arg.h
+/home/florence/CLionProjects/UniChess/headers/handle_arg.h
+../headers/sime_game.h
+/home/florence/CLionProjects/UniChess/headers/sime_game.h
 ../headers/move_actions.h
 /home/florence/CLionProjects/UniChess/headers/move_actions.h
 

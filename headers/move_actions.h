@@ -66,4 +66,12 @@ int move_is_blocked(int step, int from, int to, struct cg_status *cg);
  * */
 int do_move(const char *move, struct cg_status *cg);
 
+/**
+ * Checks if a move is valid or not
+ *
+ * @param move User's move
+ * @param cg Ongoing chess game
+ * */
+int check_move_validity(struct c_action *cga, struct cg_status *cg);
+
 #endif //UNICHESS_MOVE_ACTIONS_H

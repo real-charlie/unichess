@@ -10,12 +10,15 @@ int main(int argc, char **argv) {
     char cc[3];
     int cd = CGA_PROM;
     int ca = PN;
-    printf("D: %d\n", d.white.rooks[1].sq);
-    printf("%d\n", (cd | ca) & PB);
-    printf("%s\n", c_nsqr(d.white.queens[0].sq, cc));
-    printf("%d\n", do_move("d4", &d));
-    printf("%d\n", do_move("d5", &d));
-    printf("%d\n", do_move("Qd3", &d));
+    printf("%d\n", do_move("e4", &d));
+    printf("%d\n", do_move("e5", &d));
+    printf("%d\n", do_move("Qh3", &d));
+    printf("%d\n", do_move("Ke7", &d));
+    printf("%d\n", do_move("a3", &d));
+    printf("%d\n", do_move("Ke6", &d));
+
+
+
 
     return 0;
 }

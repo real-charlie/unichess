@@ -55,7 +55,7 @@ int pr_validate(struct c_action *cga, struct cg_status *cg) {
         int step = 0;
         if (dist % 8 == 0) {
             step = from > to ? -8 : 8;
-        } else if (dist < 8) {
+        } else if (dist < 8 && ((from % 8) == (dist % 8))) {
             step = from > to ? -1 : 1;
         }
         int vld_capt = capt_is_valid(to, cg);
@@ -93,8 +93,8 @@ int pq_validate(struct c_action *cga, struct cg_status *cg) {
 int pp_validate(struct c_action *cga, struct cg_status *cg) {
     int from = cga->tg_piece.sq, to = cga->tg_sqrn, dist = abs(from - to);
     if ((((cga->cga | CGA_MOVE) == CGA_MOVE) || ((cga->cga | CGA_PROM) == CGA_PROM)) &&
-            ((dist == 1) ||
-        (dist == 2 && !cga->tg_piece.is_moved)) &&
+        ((dist == 1) ||
+         (dist == 2 && !cga->tg_piece.is_moved)) &&
         !move_is_blocked(cg->turn ? -1 : 1, from, to, cg) && !capt_is_valid(to, cg)) {
         return 1;
     } else if ((cga->cga | CGA_CAPT) == CGA_CAPT && (dist == 7 || dist == -9) && capt_is_valid(to, cg)) {
@@ -104,9 +104,55 @@ int pp_validate(struct c_action *cga, struct cg_status *cg) {
     return 0;
 }
 
+
+int pk_validate(struct c_action *cga, struct cg_status *cg) {
+    int from = cga->tg_piece.sq, to = cga->tg_sqrn, dist = abs(from - to);
+
+    int is_capt = ((cga->cga | CGA_CAPT) == CGA_CAPT);
+    if (((cga->cga | CGA_MOVE) == CGA_MOVE) || is_capt && (dist == 1 || dist == 7 || dist == 9 || dist == 8)) {
+//        if (is_capt && !capt_is_valid(to, cg))
+//            return 0;
+
+        return 1;
+    }
+
+    return 0;
+}
+
 int check_move_validity(struct c_action *cga, struct cg_status *cg) {
     int piece = cga->tg_piece.piece;
 
+    if (piece == PK && pk_validate(cga, cg)) {
+        struct piece tmp_cga_p = cga->tg_piece;
+        struct c_player opp_player = !cg->turn ? cg->black : cg->white;
+        int tmp_move_is_valid = 0;
+
+        for (int i = 0; i < 9; i++) {
+            if (i <= 8) {
+                cga->tg_piece = opp_player.pawns[i];
+                tmp_move_is_valid |= check_move_validity(cga, cg);
+            }
+            cga->tg_piece = opp_player.bishops[i];
+            if (cga->tg_piece.piece != 0) {
+                tmp_move_is_valid |= check_move_validity(cga, cg);
+            }
+
+            cga->tg_piece = opp_player.rooks[i];
+            if (cga->tg_piece.piece != 0) {
+                tmp_move_is_valid |= check_move_validity(cga, cg);
+            }
+
+            cga->tg_piece = opp_player.queens[i];
+            if (cga->tg_piece.piece != 0) {
+                tmp_move_is_valid |= check_move_validity(cga, cg);
+            }
+
+            if (tmp_move_is_valid)
+                break;
+        }
+        cga->tg_piece = tmp_cga_p;
+        return !tmp_move_is_valid;
+    }
     switch (piece) {
         case PP:
             return pp_validate(cga, cg);
@@ -121,17 +167,23 @@ int check_move_validity(struct c_action *cga, struct cg_status *cg) {
         case PK:
             break;
         default:
-            return -1;
+            return 0;
     }
 
-    return -1;
+    return 0;
 }
 
-int loc_piece(struct c_action* cga, struct cg_status *cg) {
+int loc_piece(struct c_action *cga, struct cg_status *cg) {
     struct c_player *player = cg->turn ? &cg->black : &cg->white;
     int locd_ps_count = 0;
 
-    for (int i = 0; i < 9; i ++) {
+    if (cga->tg_piece.piece == PK) {
+        cga->tg_piece = player->king;
+        return check_move_validity(cga, cg);
+    }
+
+
+    for (int i = 0; i < 9; i++) {
         struct piece tg_sqr_tmp = cga->tg_piece;
         switch (cga->tg_piece.piece) {
             case PP:
@@ -147,11 +199,15 @@ int loc_piece(struct c_action* cga, struct cg_status *cg) {
             case PQ:
                 cga->tg_piece = player->queens[i];
         }
-        if (check_move_validity(cga, cg) == 1)
+
+        if (check_move_validity(cga, cg) == 1) {
             locd_ps_count++;
-        else
+        } else {
             cga->tg_piece = tg_sqr_tmp;
+            printf("FAILED\n");
+        }
     }
+    printf("COUNT %d\n", locd_ps_count);
     return locd_ps_count;
 }
 
@@ -165,6 +221,8 @@ int fd_piece(char piece) {
             return PB;
         case 'N':
             return PN;
+        case 'K':
+            return PK;
         default:
             return -1;
     }
@@ -218,6 +276,7 @@ struct c_action id_cga(const char *move, struct cg_status *cg) {
             cga.cga = CGA_UNDF;
             return cga;
         }
+
         char square[] = {move[1 + is_capture + has_col], move[2 + is_capture + has_col]};
         cga.tg_sqrn = c_sqrn(square);
 
@@ -275,15 +334,14 @@ int do_move(const char *move, struct cg_status *cg) {
         if (player->king.sq == curr_sq) {
             player->king.sq = tg_sq;
             player->king.is_moved = 1;
+            cg->turn = !cg->turn;
             return 1;
         }
 
-        struct piece * tmp_piece = NULL;
+        struct piece *tmp_piece = NULL;
         for (int i = 0; i < 9; i++) {
-            printf("i i %d\n", i);
             if (i <= 8 && (player->pawns[i].sq == curr_sq)) {
                 tmp_piece = &player->pawns[i];
-                printf("Pawn %d\n", tmp_piece->sq);
                 if ((cga.cga & CGA_PROM) == CGA_PROM) {
                     struct piece **tg_piece = (struct piece **) &player->queens;
                     if ((cga.cga & PR) == PR) {
@@ -318,7 +376,7 @@ int do_move(const char *move, struct cg_status *cg) {
                 tmp_piece->sq = tg_sq;
                 tmp_piece->is_moved = 1;
                 tmp_piece = NULL;
-//                cg->turn = !cg->turn;
+                cg->turn = !cg->turn;
 
                 return 1;
             }
